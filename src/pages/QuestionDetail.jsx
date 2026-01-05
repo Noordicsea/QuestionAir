@@ -92,7 +92,7 @@ export default function QuestionDetail() {
   if (error) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="card p-4 bg-rust-50 text-rust-700">
+        <div className="card p-4 bg-rust-50 dark:bg-rust-950 text-rust-700 dark:text-rust-300">
           <p>{error}</p>
           <button onClick={() => navigate(-1)} className="text-sm underline mt-2">
             Go back
@@ -114,7 +114,7 @@ export default function QuestionDetail() {
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-1 text-sm text-ink-500 hover:text-ink-700 mb-4"
+        className="flex items-center gap-1 text-sm text-ink-500 dark:text-sand-400 hover:text-ink-700 dark:hover:text-sand-200 mb-4"
       >
         <BackIcon className="w-4 h-4" />
         Back
@@ -132,7 +132,7 @@ export default function QuestionDetail() {
           )}
           <span className="tag tag-status">{question.status}</span>
           {question.cooldownUntil && new Date(question.cooldownUntil) > new Date() && (
-            <span className="tag bg-blue-100 text-blue-700">
+            <span className="tag bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
               cooldown until {formatDateTime(question.cooldownUntil)}
             </span>
           )}
@@ -140,18 +140,18 @@ export default function QuestionDetail() {
 
         {/* Title */}
         {question.title && (
-          <h1 className="text-xl font-display font-medium text-ink-900 mb-2">
+          <h1 className="text-xl font-display font-medium text-ink-900 dark:text-sand-100 mb-2">
             {question.title}
           </h1>
         )}
 
         {/* Body */}
-        <p className="text-ink-800 whitespace-pre-wrap">
+        <p className="text-ink-800 dark:text-sand-200 whitespace-pre-wrap">
           {question.body}
         </p>
 
         {/* Meta */}
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-sand-200 text-sm text-ink-500">
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-sand-200 dark:border-ink-700 text-sm text-ink-500 dark:text-sand-400">
           <span>
             {isOwner ? 'You asked this' : `From ${question.authorName}`}
           </span>
@@ -162,7 +162,7 @@ export default function QuestionDetail() {
         {versions.length > 1 && (
           <button
             onClick={() => setShowVersions(!showVersions)}
-            className="text-xs text-ink-400 hover:text-ink-600 mt-2"
+            className="text-xs text-ink-400 dark:text-sand-500 hover:text-ink-600 dark:hover:text-sand-300 mt-2"
           >
             {showVersions ? 'Hide' : 'Show'} edit history ({versions.length} versions)
           </button>
@@ -171,15 +171,15 @@ export default function QuestionDetail() {
         {showVersions && (
           <div className="mt-3 space-y-2 animate-fade-in">
             {versions.map((v, i) => (
-              <div key={v.id} className="p-3 bg-sand-50 rounded text-sm">
-                <div className="flex items-center justify-between text-xs text-ink-400 mb-1">
+              <div key={v.id} className="p-3 bg-sand-50 dark:bg-ink-800 rounded text-sm">
+                <div className="flex items-center justify-between text-xs text-ink-400 dark:text-sand-500 mb-1">
                   <span>Version {i + 1}</span>
                   <span>{formatDateTime(v.createdAt)}</span>
                 </div>
                 {v.title && (
-                  <p className="font-medium text-ink-700 mb-1">{v.title}</p>
+                  <p className="font-medium text-ink-700 dark:text-sand-300 mb-1">{v.title}</p>
                 )}
-                <p className="text-ink-600 line-clamp-3">{v.body}</p>
+                <p className="text-ink-600 dark:text-sand-400 line-clamp-3">{v.body}</p>
               </div>
             ))}
           </div>
@@ -189,7 +189,7 @@ export default function QuestionDetail() {
       {/* Target actions */}
       {isTarget && question.status !== 'declined' && (
         <div className="card p-4 mb-4">
-          <p className="text-sm font-medium text-ink-700 mb-3">Actions</p>
+          <p className="text-sm font-medium text-ink-700 dark:text-sand-300 mb-3">Actions</p>
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => updateStatus('holding')}
@@ -217,7 +217,7 @@ export default function QuestionDetail() {
             <button
               onClick={() => updateStatus('declined')}
               disabled={statusLoading}
-              className="btn btn-ghost text-sm text-rust-600 hover:bg-rust-50"
+              className="btn btn-ghost text-sm text-rust-600 dark:text-rust-400 hover:bg-rust-50 dark:hover:bg-rust-950"
             >
               <DeclineIcon className="w-4 h-4" />
               Decline
@@ -229,7 +229,7 @@ export default function QuestionDetail() {
       {/* Responses */}
       {responses.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-sm font-medium text-ink-700 mb-3">
+          <h2 className="text-sm font-medium text-ink-700 dark:text-sand-300 mb-3">
             Responses ({responses.length})
           </h2>
           <div className="space-y-3">
@@ -251,8 +251,8 @@ export default function QuestionDetail() {
 
       {/* Declined state */}
       {question.status === 'declined' && isTarget && (
-        <div className="card p-4 bg-sand-50 text-center">
-          <p className="text-ink-600 mb-2">You declined this question</p>
+        <div className="card p-4 bg-sand-50 dark:bg-ink-800 text-center">
+          <p className="text-ink-600 dark:text-sand-400 mb-2">You declined this question</p>
           <button
             onClick={() => updateStatus('active')}
             className="btn btn-secondary text-sm"
@@ -270,13 +270,13 @@ function ResponseCard({ response, currentUserId }) {
   const isOwn = response.authorId === currentUserId;
   
   return (
-    <div className={`card p-4 ${response.isDraft ? 'border-amber-300 bg-amber-50' : ''}`}>
+    <div className={`card p-4 ${response.isDraft ? 'border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950' : ''}`}>
       {response.isDraft && (
-        <span className="tag bg-amber-100 text-amber-700 mb-2">Draft</span>
+        <span className="tag bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 mb-2">Draft</span>
       )}
       
-      <div className="flex items-center gap-2 text-xs text-ink-500 mb-2">
-        <span className="font-medium text-ink-700">
+      <div className="flex items-center gap-2 text-xs text-ink-500 dark:text-sand-500 mb-2">
+        <span className="font-medium text-ink-700 dark:text-sand-300">
           {isOwn ? 'You' : response.authorName}
         </span>
         <span>·</span>
@@ -286,20 +286,20 @@ function ResponseCard({ response, currentUserId }) {
       </div>
       
       {response.type === 'quick_reaction' && (
-        <p className="text-ink-700 font-medium">{response.bodyText}</p>
+        <p className="text-ink-700 dark:text-sand-300 font-medium">{response.bodyText}</p>
       )}
       
       {(response.type === 'text_short' || response.type === 'text_long') && (
-        <p className="text-ink-800 whitespace-pre-wrap">{response.bodyText}</p>
+        <p className="text-ink-800 dark:text-sand-200 whitespace-pre-wrap">{response.bodyText}</p>
       )}
       
       {response.type === 'template' && response.templateData && (
         <div className="space-y-3">
-          <p className="text-xs text-ink-500 font-medium">{response.templateName}</p>
+          <p className="text-xs text-ink-500 dark:text-sand-500 font-medium">{response.templateName}</p>
           {Object.entries(response.templateData).map(([key, value]) => (
             <div key={key}>
-              <p className="text-xs text-ink-500 mb-0.5">{key}</p>
-              <p className="text-ink-800">{value}</p>
+              <p className="text-xs text-ink-500 dark:text-sand-500 mb-0.5">{key}</p>
+              <p className="text-ink-800 dark:text-sand-200">{value}</p>
             </div>
           ))}
         </div>
