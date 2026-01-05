@@ -137,24 +137,24 @@ export default function SwipeMode() {
   }
 
   return (
-    <div className="min-h-screen bg-sand-100 flex flex-col">
+    <div className="min-h-screen bg-sand-100 dark:bg-ink-950 flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b border-sand-200 safe-top">
+      <header className="bg-white dark:bg-ink-900 border-b border-sand-200 dark:border-ink-800 safe-top">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link
             to="/"
-            className="text-sm text-ink-600 hover:text-ink-800 flex items-center gap-1"
+            className="text-sm text-ink-600 dark:text-sand-400 hover:text-ink-800 dark:hover:text-sand-200 flex items-center gap-1"
           >
             <ExitIcon className="w-4 h-4" />
             Exit
           </Link>
           
           <div className="text-center">
-            <p className="text-sm font-medium text-ink-800">
+            <p className="text-sm font-medium text-ink-800 dark:text-sand-200">
               Swipe Mode
             </p>
             {queue.length > 0 && (
-              <p className="text-xs text-ink-500">
+              <p className="text-xs text-ink-500 dark:text-sand-500">
                 {currentIndex + 1} of {queue.length}
               </p>
             )}
@@ -165,8 +165,8 @@ export default function SwipeMode() {
             className={`
               flex items-center gap-1 px-2 py-1 rounded text-xs font-medium
               ${settings?.heavyModeEnabled
-                ? 'bg-rust-100 text-rust-700'
-                : 'bg-sand-200 text-ink-500'
+                ? 'bg-rust-100 dark:bg-rust-900 text-rust-700 dark:text-rust-300'
+                : 'bg-sand-200 dark:bg-ink-800 text-ink-500 dark:text-ink-400'
               }
             `}
           >
@@ -209,18 +209,18 @@ export default function SwipeMode() {
 
               {/* Title */}
               {currentQuestion.title && (
-                <h2 className="text-lg font-display font-medium text-ink-900 mb-2">
+                <h2 className="text-lg font-display font-medium text-ink-900 dark:text-sand-100 mb-2">
                   {currentQuestion.title}
                 </h2>
               )}
 
               {/* Body */}
-              <p className="text-ink-800 whitespace-pre-wrap">
+              <p className="text-ink-800 dark:text-sand-200 whitespace-pre-wrap">
                 {currentQuestion.body}
               </p>
 
               {/* From */}
-              <p className="text-xs text-ink-500 mt-4 pt-3 border-t border-sand-200">
+              <p className="text-xs text-ink-500 dark:text-sand-500 mt-4 pt-3 border-t border-sand-200 dark:border-ink-700">
                 From {currentQuestion.authorName}
               </p>
             </div>
@@ -262,34 +262,34 @@ export default function SwipeMode() {
                 <button
                   onClick={handleDecline}
                   disabled={actionLoading}
-                  className="flex flex-col items-center gap-1 p-3 rounded-lg bg-white border border-sand-200 hover:border-rust-300 hover:bg-rust-50 transition-colors"
+                  className="flex flex-col items-center gap-1 p-3 rounded-lg bg-white dark:bg-ink-900 border border-sand-200 dark:border-ink-700 hover:border-rust-300 dark:hover:border-rust-700 hover:bg-rust-50 dark:hover:bg-rust-950 transition-colors"
                 >
-                  <DeclineIcon className="w-5 h-5 text-rust-500" />
-                  <span className="text-xs text-ink-600">Decline</span>
+                  <DeclineIcon className="w-5 h-5 text-rust-500 dark:text-rust-400" />
+                  <span className="text-xs text-ink-600 dark:text-sand-400">Decline</span>
                 </button>
                 
                 <button
                   onClick={handleHold}
                   disabled={actionLoading}
-                  className="flex flex-col items-center gap-1 p-3 rounded-lg bg-white border border-sand-200 hover:border-amber-300 hover:bg-amber-50 transition-colors"
+                  className="flex flex-col items-center gap-1 p-3 rounded-lg bg-white dark:bg-ink-900 border border-sand-200 dark:border-ink-700 hover:border-amber-300 dark:hover:border-amber-700 hover:bg-amber-50 dark:hover:bg-amber-950 transition-colors"
                 >
-                  <HoldIcon className="w-5 h-5 text-amber-500" />
-                  <span className="text-xs text-ink-600">Hold</span>
+                  <HoldIcon className="w-5 h-5 text-amber-500 dark:text-amber-400" />
+                  <span className="text-xs text-ink-600 dark:text-sand-400">Hold</span>
                 </button>
                 
                 <button
                   onClick={handleSkip}
                   disabled={actionLoading}
-                  className="flex flex-col items-center gap-1 p-3 rounded-lg bg-white border border-sand-200 hover:border-ink-300 hover:bg-sand-50 transition-colors"
+                  className="flex flex-col items-center gap-1 p-3 rounded-lg bg-white dark:bg-ink-900 border border-sand-200 dark:border-ink-700 hover:border-ink-300 dark:hover:border-ink-600 hover:bg-sand-50 dark:hover:bg-ink-800 transition-colors"
                 >
-                  <SkipIcon className="w-5 h-5 text-ink-500" />
-                  <span className="text-xs text-ink-600">Skip</span>
+                  <SkipIcon className="w-5 h-5 text-ink-500 dark:text-ink-400" />
+                  <span className="text-xs text-ink-600 dark:text-sand-400">Skip</span>
                 </button>
                 
                 <button
                   onClick={() => setShowQuickAnswer(true)}
                   disabled={actionLoading}
-                  className="flex flex-col items-center gap-1 p-3 rounded-lg bg-sage-500 text-white hover:bg-sage-600 transition-colors"
+                  className="flex flex-col items-center gap-1 p-3 rounded-lg bg-sage-500 dark:bg-sage-600 text-white hover:bg-sage-600 dark:hover:bg-sage-500 transition-colors"
                 >
                   <AnswerIcon className="w-5 h-5" />
                   <span className="text-xs">Answer</span>
@@ -300,7 +300,7 @@ export default function SwipeMode() {
             {/* Full answer link */}
             <Link
               to={`/question/${currentQuestion.id}`}
-              className="block text-center text-sm text-ink-500 hover:text-ink-700 mt-4"
+              className="block text-center text-sm text-ink-500 dark:text-sand-500 hover:text-ink-700 dark:hover:text-sand-300 mt-4"
             >
               Open full view
             </Link>
@@ -310,7 +310,7 @@ export default function SwipeMode() {
 
       {/* Progress bar */}
       {queue.length > 0 && (
-        <div className="h-1 bg-sand-200 safe-bottom">
+        <div className="h-1 bg-sand-200 dark:bg-ink-800 safe-bottom">
           <div
             className="h-full bg-sage-500 transition-all duration-300"
             style={{ width: `${((currentIndex + 1) / queue.length) * 100}%` }}
