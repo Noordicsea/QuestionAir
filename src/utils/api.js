@@ -95,8 +95,22 @@ export const api = {
 };
 
 // Date formatting utilities
+
+// SQLite's datetime('now') returns UTC but without a 'Z' suffix,
+// so JavaScript incorrectly interprets it as local time.
+// This helper ensures the date is parsed as UTC.
+function parseUTCDate(dateString) {
+  if (!dateString) return new Date();
+  // If it already has timezone info, parse as-is
+  if (dateString.includes('Z') || dateString.includes('+') || dateString.includes('T')) {
+    return new Date(dateString);
+  }
+  // SQLite format: "2026-01-05 14:30:00" - append 'Z' to indicate UTC
+  return new Date(dateString.replace(' ', 'T') + 'Z');
+}
+
 export function formatRelativeTime(dateString) {
-  const date = new Date(dateString);
+  const date = parseUTCDate(dateString);
   const now = new Date();
   const diffMs = now - date;
   const diffSecs = Math.floor(diffMs / 1000);
@@ -116,7 +130,7 @@ export function formatRelativeTime(dateString) {
 }
 
 export function formatDateTime(dateString) {
-  const date = new Date(dateString);
+  const date = parseUTCDate(dateString);
   return date.toLocaleString('en-US', {
     month: 'short',
     day: 'numeric',
@@ -124,4 +138,5 @@ export function formatDateTime(dateString) {
     minute: '2-digit',
   });
 }
+
 
