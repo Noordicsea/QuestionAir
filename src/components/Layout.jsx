@@ -32,12 +32,12 @@ export default function Layout() {
   const isSwipeMode = location.pathname === '/swipe';
 
   return (
-    <div className="min-h-screen bg-sand-100 flex flex-col">
+    <div className="min-h-screen bg-sand-100 dark:bg-ink-950 flex flex-col">
       {/* Header - hidden in swipe mode */}
       {!isSwipeMode && (
-        <header className="bg-white border-b border-sand-200 safe-top sticky top-0 z-40">
+        <header className="bg-white dark:bg-ink-900 border-b border-sand-200 dark:border-ink-800 safe-top sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-            <h1 className="font-display text-xl font-medium text-ink-900">
+            <h1 className="font-display text-xl font-medium text-ink-900 dark:text-sand-100">
               Questionair
             </h1>
             
@@ -49,8 +49,8 @@ export default function Layout() {
                   flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium
                   transition-colors duration-150
                   ${settings?.heavyModeEnabled 
-                    ? 'bg-rust-100 text-rust-700' 
-                    : 'bg-sand-200 text-ink-500 hover:bg-sand-300'
+                    ? 'bg-rust-100 dark:bg-rust-900 text-rust-700 dark:text-rust-300' 
+                    : 'bg-sand-200 dark:bg-ink-800 text-ink-500 dark:text-ink-400 hover:bg-sand-300 dark:hover:bg-ink-700'
                   }
                 `}
                 title={settings?.heavyModeEnabled ? 'Heavy mode on' : 'Heavy mode off'}
@@ -60,8 +60,8 @@ export default function Layout() {
               </button>
               
               {/* User indicator */}
-              <div className="w-8 h-8 rounded-full bg-sage-100 flex items-center justify-center">
-                <span className="text-sm font-medium text-sage-700">
+              <div className="w-8 h-8 rounded-full bg-sage-100 dark:bg-sage-900 flex items-center justify-center">
+                <span className="text-sm font-medium text-sage-700 dark:text-sage-300">
                   {user?.displayName?.[0]?.toUpperCase() || 'U'}
                 </span>
               </div>
@@ -76,7 +76,7 @@ export default function Layout() {
       </main>
       
       {/* Bottom navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-sand-200 safe-bottom z-40">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-ink-900 border-t border-sand-200 dark:border-ink-800 safe-bottom z-40">
         <div className="max-w-2xl mx-auto px-2">
           <div className="flex items-center justify-around h-16">
             {navItems.map(({ path, label, icon: Icon }) => {
@@ -96,8 +96,8 @@ export default function Layout() {
                     flex flex-col items-center justify-center gap-0.5 
                     w-16 h-12 rounded-lg transition-colors duration-150
                     ${isActive 
-                      ? 'text-ink-900' 
-                      : 'text-ink-400 hover:text-ink-600'
+                      ? 'text-ink-900 dark:text-sand-100' 
+                      : 'text-ink-400 dark:text-ink-500 hover:text-ink-600 dark:hover:text-sand-300'
                     }
                   `}
                 >
@@ -174,4 +174,5 @@ function HeavyIcon({ className }) {
     </svg>
   );
 }
+
 

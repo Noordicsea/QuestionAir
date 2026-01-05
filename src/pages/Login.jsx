@@ -29,10 +29,10 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-sand-100 flex flex-col">
+    <div className="min-h-screen bg-sand-100 dark:bg-ink-950 flex flex-col">
       {/* Decorative background */}
       <div 
-        className="absolute inset-0 opacity-40"
+        className="absolute inset-0 opacity-40 dark:opacity-20"
         style={{
           backgroundImage: `
             radial-gradient(circle at 20% 20%, rgba(125, 154, 125, 0.15) 0%, transparent 50%),
@@ -44,10 +44,10 @@ export default function Login() {
       <div className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
         {/* Logo/Title */}
         <div className="text-center mb-8">
-          <h1 className="font-display text-4xl font-medium text-ink-900 mb-2">
+          <h1 className="font-display text-4xl font-medium text-ink-900 dark:text-sand-100 mb-2">
             Questionair
           </h1>
-          <p className="text-ink-500">
+          <p className="text-ink-500 dark:text-ink-400">
             A place for our questions so we can breathe.
           </p>
         </div>
@@ -59,7 +59,7 @@ export default function Login() {
               <div>
                 <label 
                   htmlFor="username" 
-                  className="block text-sm font-medium text-ink-700 mb-1"
+                  className="block text-sm font-medium text-ink-700 dark:text-sand-300 mb-1"
                 >
                   Username
                 </label>
@@ -78,7 +78,7 @@ export default function Login() {
               <div>
                 <label 
                   htmlFor="password" 
-                  className="block text-sm font-medium text-ink-700 mb-1"
+                  className="block text-sm font-medium text-ink-700 dark:text-sand-300 mb-1"
                 >
                   Password
                 </label>
@@ -94,7 +94,7 @@ export default function Login() {
               </div>
               
               {(localError || error) && (
-                <p className="text-sm text-rust-600 bg-rust-50 px-3 py-2 rounded">
+                <p className="text-sm text-rust-600 dark:text-rust-400 bg-rust-50 dark:bg-rust-950 px-3 py-2 rounded">
                   {localError || error}
                 </p>
               )}
@@ -109,7 +109,7 @@ export default function Login() {
             </div>
           </form>
           
-          <p className="text-center text-xs text-ink-400 mt-6">
+          <p className="text-center text-xs text-ink-400 dark:text-ink-500 mt-6">
             Take your time. Protect your energy.
           </p>
         </div>

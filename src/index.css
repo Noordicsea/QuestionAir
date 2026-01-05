@@ -10,13 +10,22 @@
   }
   
   body {
-    @apply min-h-screen;
+    @apply min-h-screen bg-sand-100 text-ink-900;
     font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+
+  /* Dark mode body */
+  .dark body {
+    @apply bg-ink-950 text-sand-100;
   }
   
   /* Focus styles - accessible but not intrusive */
   :focus-visible {
     @apply outline-none ring-2 ring-sage-500 ring-offset-2 ring-offset-sand-100;
+  }
+  
+  .dark :focus-visible {
+    @apply ring-offset-ink-900;
   }
   
   button:focus:not(:focus-visible) {
@@ -38,25 +47,49 @@
     @apply bg-ink-800 text-sand-50 hover:bg-ink-700 
            active:bg-ink-900;
   }
+
+  .dark .btn-primary {
+    @apply bg-sand-100 text-ink-900 hover:bg-sand-200 
+           active:bg-sand-300;
+  }
   
   .btn-secondary {
     @apply bg-sand-200 text-ink-800 hover:bg-sand-300 
            active:bg-sand-400;
+  }
+
+  .dark .btn-secondary {
+    @apply bg-ink-800 text-sand-200 hover:bg-ink-700 
+           active:bg-ink-600;
   }
   
   .btn-ghost {
     @apply bg-transparent text-ink-700 hover:bg-sand-200 
            active:bg-sand-300;
   }
+
+  .dark .btn-ghost {
+    @apply text-sand-300 hover:bg-ink-800 
+           active:bg-ink-700;
+  }
   
   .btn-danger {
     @apply bg-rust-600 text-sand-50 hover:bg-rust-700 
+           active:bg-rust-800;
+  }
+
+  .dark .btn-danger {
+    @apply bg-rust-700 text-sand-50 hover:bg-rust-600 
            active:bg-rust-800;
   }
   
   /* Card component */
   .card {
     @apply bg-white rounded-lg shadow-subtle border border-sand-200;
+  }
+
+  .dark .card {
+    @apply bg-ink-900 border-ink-800 shadow-none;
   }
   
   /* Input styles */
@@ -65,6 +98,11 @@
            bg-white text-ink-900 placeholder-ink-400
            focus:border-sage-500 focus:ring-1 focus:ring-sage-500
            transition-colors duration-150;
+  }
+
+  .dark .input {
+    @apply border-ink-700 bg-ink-900 text-sand-100 placeholder-ink-500
+           focus:border-sage-600 focus:ring-sage-600;
   }
   
   .input-error {
@@ -80,21 +118,63 @@
   .tag-quick {
     @apply bg-sage-100 text-sage-700;
   }
+
+  .dark .tag-quick {
+    @apply bg-sage-900 text-sage-300;
+  }
   
   .tag-medium {
     @apply bg-sand-200 text-ink-700;
+  }
+
+  .dark .tag-medium {
+    @apply bg-ink-800 text-sand-300;
   }
   
   .tag-deep {
     @apply bg-ink-200 text-ink-800;
   }
+
+  .dark .tag-deep {
+    @apply bg-ink-700 text-sand-200;
+  }
   
   .tag-heavy {
     @apply bg-rust-100 text-rust-700;
   }
+
+  .dark .tag-heavy {
+    @apply bg-rust-900 text-rust-300;
+  }
   
   .tag-status {
     @apply bg-sand-100 text-ink-600;
+  }
+
+  .dark .tag-status {
+    @apply bg-ink-800 text-sand-400;
+  }
+
+  /* Theme toggle button styles */
+  .theme-option {
+    @apply flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium
+           transition-colors duration-150 cursor-pointer;
+  }
+
+  .theme-option-active {
+    @apply bg-sage-100 text-sage-800;
+  }
+
+  .dark .theme-option-active {
+    @apply bg-sage-900 text-sage-200;
+  }
+
+  .theme-option-inactive {
+    @apply text-ink-600 hover:bg-sand-200;
+  }
+
+  .dark .theme-option-inactive {
+    @apply text-sand-400 hover:bg-ink-800;
   }
 }
 
@@ -180,4 +260,3 @@
 .animate-slide-up {
   animation: slideUp 0.3s ease-out;
 }
-

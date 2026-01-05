@@ -132,3 +132,4 @@ This app is intentionally designed to avoid "vibe coded" aesthetics:
 
 MIT
 
+

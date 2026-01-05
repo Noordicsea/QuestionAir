@@ -14,3 +14,4 @@ export function getOtherUserId(db, currentUserId) {
   return otherUser?.id;
 }
 
+

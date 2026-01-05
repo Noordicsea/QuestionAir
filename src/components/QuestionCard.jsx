@@ -45,44 +45,44 @@ export default function QuestionCard({ question, showAuthor = true }) {
         )}
         
         {hasDraft && (
-          <span className="tag bg-amber-100 text-amber-700">
+          <span className="tag bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300">
             draft
           </span>
         )}
         
         {isOnCooldown && (
-          <span className="tag bg-blue-100 text-blue-700">
+          <span className="tag bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
             cooldown
           </span>
         )}
         
         {hasVoice && (
-          <VoiceIcon className="w-4 h-4 text-ink-400" />
+          <VoiceIcon className="w-4 h-4 text-ink-400 dark:text-ink-500" />
         )}
         
         {hasTemplate && (
-          <TemplateIcon className="w-4 h-4 text-ink-400" />
+          <TemplateIcon className="w-4 h-4 text-ink-400 dark:text-ink-500" />
         )}
       </div>
       
       {/* Title/Body */}
       {title ? (
         <>
-          <h3 className="font-medium text-ink-900 mb-1 line-clamp-2">
+          <h3 className="font-medium text-ink-900 dark:text-sand-100 mb-1 line-clamp-2">
             {title}
           </h3>
-          <p className="text-sm text-ink-600 line-clamp-2">
+          <p className="text-sm text-ink-600 dark:text-sand-400 line-clamp-2">
             {body}
           </p>
         </>
       ) : (
-        <p className="text-ink-800 line-clamp-3">
+        <p className="text-ink-800 dark:text-sand-200 line-clamp-3">
           {body}
         </p>
       )}
       
       {/* Meta row */}
-      <div className="flex items-center justify-between mt-3 text-xs text-ink-500">
+      <div className="flex items-center justify-between mt-3 text-xs text-ink-500 dark:text-ink-400">
         <span>
           {showAuthor 
             ? `from ${authorName}` 
@@ -132,4 +132,5 @@ function ResponseIcon({ className }) {
     </svg>
   );
 }
+
 

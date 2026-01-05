@@ -263,3 +263,4 @@ function InboxEmptyIcon({ className }) {
   );
 }
 
+
