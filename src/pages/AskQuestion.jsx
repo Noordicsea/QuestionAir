@@ -50,17 +50,17 @@ export default function AskQuestion() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-4">
-      <h2 className="text-xl font-display font-medium text-ink-900 mb-1">
+      <h2 className="text-xl font-display font-medium text-ink-900 dark:text-sand-100 mb-1">
         Ask a question
       </h2>
-      <p className="text-sm text-ink-500 mb-6">
+      <p className="text-sm text-ink-500 dark:text-sand-400 mb-6">
         to {partner?.displayName || 'your partner'}
       </p>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Question settings panel */}
         <div className="card p-4">
-          <p className="text-sm font-medium text-ink-700 mb-3">
+          <p className="text-sm font-medium text-ink-700 dark:text-sand-300 mb-3">
             What kind of question is this?
           </p>
           
@@ -77,15 +77,15 @@ export default function AskQuestion() {
                 className={`
                   p-3 rounded-lg border-2 text-left transition-colors
                   ${depth === opt.value 
-                    ? 'border-sage-500 bg-sage-50' 
-                    : 'border-sand-200 hover:border-sand-300'
+                    ? 'border-sage-500 bg-sage-50 dark:bg-sage-900/50' 
+                    : 'border-sand-200 dark:border-ink-700 hover:border-sand-300 dark:hover:border-ink-600'
                   }
                 `}
               >
-                <span className="block text-sm font-medium text-ink-800">
+                <span className="block text-sm font-medium text-ink-800 dark:text-sand-200">
                   {opt.label}
                 </span>
-                <span className="block text-xs text-ink-500">
+                <span className="block text-xs text-ink-500 dark:text-sand-400">
                   {opt.desc}
                 </span>
               </button>
@@ -93,18 +93,18 @@ export default function AskQuestion() {
           </div>
           
           {/* Heavy toggle */}
-          <label className="flex items-start gap-3 p-3 rounded-lg border border-sand-200 cursor-pointer hover:bg-sand-50">
+          <label className="flex items-start gap-3 p-3 rounded-lg border border-sand-200 dark:border-ink-700 cursor-pointer hover:bg-sand-50 dark:hover:bg-ink-800">
             <input
               type="checkbox"
               checked={isHeavy}
               onChange={(e) => setIsHeavy(e.target.checked)}
-              className="mt-0.5 w-4 h-4 rounded border-sand-300 text-rust-600 focus:ring-rust-500"
+              className="mt-0.5 w-4 h-4 rounded border-sand-300 dark:border-ink-600 text-rust-600 focus:ring-rust-500"
             />
             <div>
-              <span className="block text-sm font-medium text-ink-800">
+              <span className="block text-sm font-medium text-ink-800 dark:text-sand-200">
                 Mark as heavy
               </span>
-              <span className="block text-xs text-ink-500">
+              <span className="block text-xs text-ink-500 dark:text-sand-400">
                 Will be hidden unless Heavy Mode is on
               </span>
             </div>
@@ -112,7 +112,7 @@ export default function AskQuestion() {
           
           {/* Cooldown suggestion */}
           <div className="mt-3">
-            <label className="block text-xs font-medium text-ink-600 mb-1">
+            <label className="block text-xs font-medium text-ink-600 dark:text-sand-400 mb-1">
               Suggest cooldown (optional)
             </label>
             <select
@@ -131,8 +131,8 @@ export default function AskQuestion() {
         
         {/* Title (optional) */}
         <div>
-          <label className="block text-sm font-medium text-ink-700 mb-1">
-            Title <span className="text-ink-400 font-normal">(optional)</span>
+          <label className="block text-sm font-medium text-ink-700 dark:text-sand-300 mb-1">
+            Title <span className="text-ink-400 dark:text-ink-500 font-normal">(optional)</span>
           </label>
           <input
             type="text"
@@ -147,11 +147,11 @@ export default function AskQuestion() {
         {/* Body */}
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="block text-sm font-medium text-ink-700">
+            <label className="block text-sm font-medium text-ink-700 dark:text-sand-300">
               Your question
             </label>
             {maxLength && (
-              <span className={`text-xs ${body.length > maxLength ? 'text-rust-600' : 'text-ink-400'}`}>
+              <span className={`text-xs ${body.length > maxLength ? 'text-rust-600 dark:text-rust-400' : 'text-ink-400 dark:text-ink-500'}`}>
                 {body.length}/{maxLength}
               </span>
             )}
@@ -164,14 +164,14 @@ export default function AskQuestion() {
             maxLength={maxLength || undefined}
           />
           {depth === 'quick' && (
-            <p className="text-xs text-ink-400 mt-1">
+            <p className="text-xs text-ink-400 dark:text-sand-500 mt-1">
               Quick questions work best when they're focused and specific
             </p>
           )}
         </div>
         
         {error && (
-          <p className="text-sm text-rust-600 bg-rust-50 px-3 py-2 rounded">
+          <p className="text-sm text-rust-600 dark:text-rust-400 bg-rust-50 dark:bg-rust-950 px-3 py-2 rounded">
             {error}
           </p>
         )}

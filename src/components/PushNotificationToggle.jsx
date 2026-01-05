@@ -51,13 +51,13 @@ export default function PushNotificationToggle({ enabled, onToggle }) {
     return (
       <div className="flex items-center justify-between opacity-60">
         <div>
-          <span className="text-sm font-medium text-ink-800">Push notifications</span>
-          <p className="text-xs text-ink-500">Not supported in this browser</p>
+          <span className="text-sm font-medium text-ink-800 dark:text-sand-200">Push notifications</span>
+          <p className="text-xs text-ink-500 dark:text-sand-400">Not supported in this browser</p>
         </div>
         <input
           type="checkbox"
           disabled
-          className="w-5 h-5 rounded border-sand-300 text-sage-600"
+          className="w-5 h-5 rounded border-sand-300 dark:border-ink-600 text-sage-600"
         />
       </div>
     );
@@ -67,15 +67,15 @@ export default function PushNotificationToggle({ enabled, onToggle }) {
     return (
       <div className="flex items-center justify-between">
         <div>
-          <span className="text-sm font-medium text-ink-800">Push notifications</span>
-          <p className="text-xs text-rust-600">
+          <span className="text-sm font-medium text-ink-800 dark:text-sand-200">Push notifications</span>
+          <p className="text-xs text-rust-600 dark:text-rust-400">
             Blocked - enable in browser settings
           </p>
         </div>
         <input
           type="checkbox"
           disabled
-          className="w-5 h-5 rounded border-sand-300 text-sage-600"
+          className="w-5 h-5 rounded border-sand-300 dark:border-ink-600 text-sage-600"
         />
       </div>
     );
@@ -85,8 +85,8 @@ export default function PushNotificationToggle({ enabled, onToggle }) {
     <div className="space-y-2">
       <label className="flex items-center justify-between cursor-pointer">
         <div>
-          <span className="text-sm font-medium text-ink-800">Push notifications</span>
-          <p className="text-xs text-ink-500">
+          <span className="text-sm font-medium text-ink-800 dark:text-sand-200">Push notifications</span>
+          <p className="text-xs text-ink-500 dark:text-sand-400">
             {subscribed 
               ? 'You will receive push notifications' 
               : 'Get notified about new questions and responses'
@@ -100,13 +100,13 @@ export default function PushNotificationToggle({ enabled, onToggle }) {
             type="checkbox"
             checked={subscribed}
             onChange={handleToggle}
-            className="w-5 h-5 rounded border-sand-300 text-sage-600 focus:ring-sage-500 cursor-pointer"
+            className="w-5 h-5 rounded border-sand-300 dark:border-ink-600 text-sage-600 focus:ring-sage-500 cursor-pointer"
           />
         )}
       </label>
       
       {error && (
-        <p className="text-xs text-rust-600 bg-rust-50 px-2 py-1 rounded">
+        <p className="text-xs text-rust-600 dark:text-rust-400 bg-rust-50 dark:bg-rust-950 px-2 py-1 rounded">
           {error}
         </p>
       )}
