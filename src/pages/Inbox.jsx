@@ -3,8 +3,15 @@ import { Link, useOutletContext } from 'react-router-dom';
 import { api } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import QuestionCard from '../components/QuestionCard';
+import RecommendationCard from '../components/RecommendationCard';
 import Spinner from '../components/Spinner';
 import EmptyState from '../components/EmptyState';
+
+const CONTENT_TYPE_OPTIONS = [
+  { value: 'all', label: 'All' },
+  { value: 'questions', label: 'Questions' },
+  { value: 'recommendations', label: 'Recommendations' },
+];
 
 const DEPTH_OPTIONS = [
   { value: '', label: 'All depths' },
@@ -32,36 +39,66 @@ export default function Inbox() {
   const { settings } = useAuth();
   const { stats, refreshStats } = useOutletContext();
   const [questions, setQuestions] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Filters
+  // Content type filter
+  const [contentType, setContentType] = useState('all');
+  
+  // Filters (for questions)
   const [depth, setDepth] = useState('');
   const [status, setStatus] = useState('');
   const [sort, setSort] = useState('newest');
   const [showHeavy, setShowHeavy] = useState(settings?.heavyModeEnabled ? 'true' : 'false');
   const [showFilters, setShowFilters] = useState(false);
+  
+  // Recommendation stats
+  const [recStats, setRecStats] = useState(null);
 
   useEffect(() => {
-    loadQuestions();
-  }, [depth, status, sort, showHeavy]);
+    loadContent();
+  }, [depth, status, sort, showHeavy, contentType]);
 
   // Update showHeavy when settings change
   useEffect(() => {
     setShowHeavy(settings?.heavyModeEnabled ? 'true' : 'false');
   }, [settings?.heavyModeEnabled]);
 
-  const loadQuestions = async () => {
+  const loadContent = async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await api.get('/questions', {
-        depth: depth || undefined,
-        status: status || undefined,
-        sort,
-        showHeavy,
-      });
-      setQuestions(data.questions);
+      const promises = [];
+      
+      // Load questions if needed
+      if (contentType === 'all' || contentType === 'questions') {
+        promises.push(
+          api.get('/questions', {
+            depth: depth || undefined,
+            status: status || undefined,
+            sort,
+            showHeavy,
+          })
+        );
+      } else {
+        promises.push(Promise.resolve({ questions: [] }));
+      }
+      
+      // Load recommendations if needed
+      if (contentType === 'all' || contentType === 'recommendations') {
+        promises.push(api.get('/recommendations'));
+        promises.push(api.get('/recommendations/stats/summary'));
+      } else {
+        promises.push(Promise.resolve({ recommendations: [] }));
+        promises.push(Promise.resolve({ total: 0, new: 0 }));
+      }
+      
+      const [questionsData, recsData, recStatsData] = await Promise.all(promises);
+      
+      setQuestions(questionsData.questions);
+      setRecommendations(recsData.recommendations);
+      setRecStats(recStatsData);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -70,27 +107,50 @@ export default function Inbox() {
   };
 
   const getRandomLight = () => {
+    setContentType('questions');
     setDepth('quick');
     setShowHeavy('false');
     setSort('random');
   };
+
+  // Combine and sort items for "all" view
+  const getCombinedItems = () => {
+    if (contentType === 'questions') {
+      return questions.map(q => ({ type: 'question', data: q }));
+    }
+    if (contentType === 'recommendations') {
+      return recommendations.map(r => ({ type: 'recommendation', data: r }));
+    }
+    
+    // Combine both
+    const combined = [
+      ...questions.map(q => ({ type: 'question', data: q, date: new Date(q.createdAt) })),
+      ...recommendations.map(r => ({ type: 'recommendation', data: r, date: new Date(r.createdAt) })),
+    ];
+    
+    // Sort by date (newest first)
+    combined.sort((a, b) => b.date - a.date);
+    
+    return combined;
+  };
+
+  const items = getCombinedItems();
+  const totalNew = (stats?.inbox?.new || 0) + (recStats?.new || 0);
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-4">
       {/* Header with stats */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-xl font-display font-medium text-ink-900">
+          <h2 className="text-xl font-display font-medium text-ink-900 dark:text-sand-100">
             Inbox
           </h2>
-          {stats && (
-            <p className="text-sm text-ink-500">
-              {stats.inbox.new > 0 
-                ? `${stats.inbox.new} new question${stats.inbox.new > 1 ? 's' : ''}`
-                : 'All caught up'
-              }
-            </p>
-          )}
+          <p className="text-sm text-ink-500 dark:text-sand-400">
+            {totalNew > 0 
+              ? `${totalNew} new item${totalNew > 1 ? 's' : ''}`
+              : 'All caught up'
+            }
+          </p>
         </div>
         
         <div className="flex items-center gap-2">
@@ -105,20 +165,52 @@ export default function Inbox() {
           
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`btn btn-ghost text-sm ${showFilters ? 'bg-sand-200' : ''}`}
+            className={`btn btn-ghost text-sm ${showFilters ? 'bg-sand-200 dark:bg-ink-700' : ''}`}
           >
             <FilterIcon className="w-4 h-4" />
             <span className="hidden sm:inline">Filter</span>
           </button>
         </div>
       </div>
+
+      {/* Content type tabs */}
+      <div className="flex gap-1 mb-4 p-1 bg-sand-200 dark:bg-ink-800 rounded-lg">
+        {CONTENT_TYPE_OPTIONS.map(opt => (
+          <button
+            key={opt.value}
+            onClick={() => setContentType(opt.value)}
+            className={`
+              flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors
+              ${contentType === opt.value
+                ? 'bg-white dark:bg-ink-700 text-ink-900 dark:text-sand-100 shadow-sm'
+                : 'text-ink-500 dark:text-sand-400 hover:text-ink-700 dark:hover:text-sand-300'
+              }
+            `}
+          >
+            {opt.label}
+            {opt.value === 'questions' && stats?.inbox?.new > 0 && (
+              <span className="ml-1.5 px-1.5 py-0.5 bg-rust-500 text-white text-xs rounded-full">
+                {stats.inbox.new}
+              </span>
+            )}
+            {opt.value === 'recommendations' && recStats?.new > 0 && (
+              <span className="ml-1.5 px-1.5 py-0.5 bg-sage-500 text-white text-xs rounded-full">
+                {recStats.new}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
       
-      {/* Filters panel */}
-      {showFilters && (
+      {/* Filters panel - only for questions */}
+      {showFilters && (contentType === 'all' || contentType === 'questions') && (
         <div className="card p-4 mb-4 animate-fade-in">
+          <p className="text-xs font-medium text-ink-500 dark:text-sand-400 mb-3">
+            Question filters
+          </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div>
-              <label className="block text-xs font-medium text-ink-600 mb-1">
+              <label className="block text-xs font-medium text-ink-600 dark:text-sand-400 mb-1">
                 Depth
               </label>
               <select
@@ -135,7 +227,7 @@ export default function Inbox() {
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-ink-600 mb-1">
+              <label className="block text-xs font-medium text-ink-600 dark:text-sand-400 mb-1">
                 Status
               </label>
               <select
@@ -152,7 +244,7 @@ export default function Inbox() {
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-ink-600 mb-1">
+              <label className="block text-xs font-medium text-ink-600 dark:text-sand-400 mb-1">
                 Sort by
               </label>
               <select
@@ -169,7 +261,7 @@ export default function Inbox() {
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-ink-600 mb-1">
+              <label className="block text-xs font-medium text-ink-600 dark:text-sand-400 mb-1">
                 Heavy
               </label>
               <select
@@ -191,44 +283,50 @@ export default function Inbox() {
               setSort('newest');
               setShowHeavy(settings?.heavyModeEnabled ? 'true' : 'false');
             }}
-            className="text-xs text-ink-500 hover:text-ink-700 mt-3"
+            className="text-xs text-ink-500 hover:text-ink-700 dark:text-sand-400 dark:hover:text-sand-300 mt-3"
           >
             Reset filters
           </button>
         </div>
       )}
       
-      {/* Questions list */}
+      {/* Content list */}
       {loading ? (
         <div className="flex justify-center py-12">
           <Spinner size="lg" />
         </div>
       ) : error ? (
-        <div className="card p-4 bg-rust-50 text-rust-700">
+        <div className="card p-4 bg-rust-50 dark:bg-rust-950 text-rust-700 dark:text-rust-300">
           <p>{error}</p>
-          <button onClick={loadQuestions} className="text-sm underline mt-2">
+          <button onClick={loadContent} className="text-sm underline mt-2">
             Try again
           </button>
         </div>
-      ) : questions.length === 0 ? (
+      ) : items.length === 0 ? (
         <EmptyState
           icon={InboxEmptyIcon}
-          title="No questions here"
+          title={contentType === 'recommendations' ? 'No recommendations yet' : 'No questions here'}
           description={
-            depth || status || showHeavy === 'only'
-              ? "Try adjusting your filters"
-              : "When someone asks you something, it'll appear here"
+            contentType === 'recommendations'
+              ? "When someone recommends something, it'll appear here"
+              : depth || status || showHeavy === 'only'
+                ? "Try adjusting your filters"
+                : "When someone asks you something, it'll appear here"
           }
           action={
             <Link to="/ask" className="btn btn-primary">
-              Ask a question
+              {contentType === 'recommendations' ? 'Make a recommendation' : 'Ask a question'}
             </Link>
           }
         />
       ) : (
         <div className="space-y-3">
-          {questions.map(q => (
-            <QuestionCard key={q.id} question={q} />
+          {items.map((item, index) => (
+            item.type === 'question' ? (
+              <QuestionCard key={`q-${item.data.id}`} question={item.data} />
+            ) : (
+              <RecommendationCard key={`r-${item.data.id}`} recommendation={item.data} />
+            )
           ))}
         </div>
       )}
@@ -262,5 +360,3 @@ function InboxEmptyIcon({ className }) {
     </svg>
   );
 }
-
-

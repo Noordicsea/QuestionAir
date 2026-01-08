@@ -83,14 +83,38 @@ export const api = {
     return handleResponse(response);
   },
   
-  async upload(endpoint, formData) {
-    const response = await fetch(`${API_BASE}${endpoint}`, {
-      method: 'POST',
-      credentials: 'include',
-      body: formData,
+  async upload(endpoint, formData, onProgress) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable && onProgress) {
+          const percentComplete = Math.round((e.loaded / e.total) * 100);
+          onProgress(percentComplete);
+        }
+      });
+      
+      xhr.addEventListener('load', async () => {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve(data);
+          } else {
+            reject(new ApiError(data.error || 'Upload failed', xhr.status, data));
+          }
+        } catch {
+          reject(new ApiError('Invalid response', xhr.status, {}));
+        }
+      });
+      
+      xhr.addEventListener('error', () => {
+        reject(new ApiError('Network error', 0, {}));
+      });
+      
+      xhr.open('POST', `${API_BASE}${endpoint}`);
+      xhr.withCredentials = true;
+      xhr.send(formData);
     });
-    
-    return handleResponse(response);
   },
 };
 

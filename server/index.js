@@ -14,6 +14,7 @@ import templatesRoutes from './routes/templates.js';
 import swipeRoutes from './routes/swipe.js';
 import pushRoutes from './routes/push.js';
 import settingsRoutes from './routes/settings.js';
+import recommendationsRoutes from './routes/recommendations.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -32,8 +33,9 @@ app.use(helmet({
       scriptSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "blob:"],
+      imgSrc: ["'self'", "data:", "blob:", "https://i.ytimg.com", "https://i.vimeocdn.com", "https://p16-sign-sg.tiktokcdn.com"],
       connectSrc: ["'self'"],
+      frameSrc: ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://player.vimeo.com", "https://www.tiktok.com"],
     },
   },
 }));
@@ -74,6 +76,7 @@ app.use('/api/templates', templatesRoutes);
 app.use('/api/swipe', swipeRoutes);
 app.use('/api/push', pushRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/recommendations', recommendationsRoutes);
 
 // Serve voice files
 app.use('/api/voice', express.static(join(__dirname, '..', 'data', 'voice')));

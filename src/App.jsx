@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Inbox from './pages/Inbox';
 import Sent from './pages/Sent';
 import QuestionDetail from './pages/QuestionDetail';
+import RecommendationDetail from './pages/RecommendationDetail';
 import AskQuestion from './pages/AskQuestion';
 import SwipeMode from './pages/SwipeMode';
 import Settings from './pages/Settings';
@@ -61,6 +62,7 @@ export default function App() {
         <Route index element={<Inbox />} />
         <Route path="sent" element={<Sent />} />
         <Route path="question/:id" element={<QuestionDetail />} />
+        <Route path="recommendation/:id" element={<RecommendationDetail />} />
         <Route path="ask" element={<AskQuestion />} />
         <Route path="swipe" element={<SwipeMode />} />
         <Route path="settings" element={<Settings />} />
@@ -70,5 +72,6 @@ export default function App() {
     </Routes>
   );
 }
+
 
 

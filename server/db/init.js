@@ -13,6 +13,7 @@ import { mkdirSync } from 'fs';
 try {
   mkdirSync(join(__dirname, '..', '..', 'data'), { recursive: true });
   mkdirSync(join(__dirname, '..', '..', 'data', 'voice'), { recursive: true });
+  mkdirSync(join(__dirname, '..', '..', 'data', 'uploads'), { recursive: true });
 } catch (e) {
   // Directory exists
 }

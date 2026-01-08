@@ -6,7 +6,7 @@ import { api } from '../utils/api';
 const navItems = [
   { path: '/', label: 'Inbox', icon: InboxIcon },
   { path: '/sent', label: 'Sent', icon: SentIcon },
-  { path: '/ask', label: 'Ask', icon: AskIcon },
+  { path: '/ask', label: 'Share', icon: ShareIcon },
   { path: '/swipe', label: 'Swipe', icon: SwipeIcon },
   { path: '/settings', label: 'Settings', icon: SettingsIcon },
 ];
@@ -139,12 +139,17 @@ function SentIcon({ className }) {
   );
 }
 
-function AskIcon({ className }) {
+function ShareIcon({ className }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      {/* Combined question mark and plus icon */}
       <circle cx="12" cy="12" r="10" />
-      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 1.5-2 2.5-3 2.5" />
       <line x1="12" y1="17" x2="12.01" y2="17" />
+      {/* Small plus indicator */}
+      <circle cx="18" cy="6" r="4" fill="currentColor" stroke="none" />
+      <line x1="18" y1="4" x2="18" y2="8" stroke="white" strokeWidth="1.5" />
+      <line x1="16" y1="6" x2="20" y2="6" stroke="white" strokeWidth="1.5" />
     </svg>
   );
 }

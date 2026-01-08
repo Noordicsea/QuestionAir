@@ -111,6 +111,25 @@ CREATE TABLE IF NOT EXISTS swipe_queue (
     UNIQUE(user_id, question_id)
 );
 
+-- Recommendations table
+CREATE TABLE IF NOT EXISTS recommendations (
+    id TEXT PRIMARY KEY,
+    author_user_id TEXT NOT NULL REFERENCES users(id),
+    target_user_id TEXT NOT NULL REFERENCES users(id),
+    type TEXT NOT NULL CHECK(type IN ('link', 'file', 'youtube', 'vimeo', 'tiktok')),
+    url TEXT,
+    file_path TEXT,
+    file_name TEXT,
+    file_type TEXT,
+    file_size INTEGER,
+    title TEXT,
+    note TEXT,
+    status TEXT DEFAULT 'new' CHECK(status IN ('new', 'viewed')),
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now')),
+    CHECK(author_user_id != target_user_id)
+);
+
 -- Push notification subscriptions
 CREATE TABLE IF NOT EXISTS push_subscriptions (
     id TEXT PRIMARY KEY,
@@ -147,6 +166,8 @@ CREATE INDEX IF NOT EXISTS idx_responses_question ON responses(question_id);
 CREATE INDEX IF NOT EXISTS idx_events_user_unseen ON events(user_id, seen_at);
 CREATE INDEX IF NOT EXISTS idx_swipe_queue_user ON swipe_queue(user_id, position);
 CREATE INDEX IF NOT EXISTS idx_sessions_expired ON sessions(expired);
+CREATE INDEX IF NOT EXISTS idx_recommendations_target ON recommendations(target_user_id, status);
+CREATE INDEX IF NOT EXISTS idx_recommendations_author ON recommendations(author_user_id);
 
 -- Insert default quick reactions
 INSERT OR IGNORE INTO quick_reactions (id, label, emoji, sort_order) VALUES

@@ -190,6 +190,10 @@ export function createEvent(db, userId, eventType, payload) {
       title = 'Ready to revisit';
       body = 'A held question is ready for you';
       break;
+    case 'new_recommendation':
+      title = 'New recommendation';
+      body = payload.type === 'file' ? 'Someone shared a file with you' : 'Someone shared something with you';
+      break;
   }
   
   const pushPayload = JSON.stringify({
@@ -222,5 +226,6 @@ export function createEvent(db, userId, eventType, payload) {
 }
 
 export default router;
+
 
 
