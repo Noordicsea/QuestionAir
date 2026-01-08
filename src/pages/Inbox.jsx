@@ -69,36 +69,57 @@ export default function Inbox() {
     setLoading(true);
     setError(null);
     try {
-      const promises = [];
-      
-      // Load questions if needed
-      if (contentType === 'all' || contentType === 'questions') {
-        promises.push(
-          api.get('/questions', {
+      // Build promises based on content type
+      const questionsPromise = (contentType === 'all' || contentType === 'questions')
+        ? api.get('/questions', {
             depth: depth || undefined,
             status: status || undefined,
             sort,
             showHeavy,
           })
-        );
+        : Promise.resolve({ questions: [] });
+      
+      const recsPromise = (contentType === 'all' || contentType === 'recommendations')
+        ? api.get('/recommendations')
+        : Promise.resolve({ recommendations: [] });
+      
+      const recStatsPromise = (contentType === 'all' || contentType === 'recommendations')
+        ? api.get('/recommendations/stats/summary')
+        : Promise.resolve({ total: 0, new: 0 });
+      
+      // Use allSettled so one failure doesn't break others
+      const [questionsResult, recsResult, recStatsResult] = await Promise.allSettled([
+        questionsPromise,
+        recsPromise,
+        recStatsPromise,
+      ]);
+      
+      if (questionsResult.status === 'fulfilled') {
+        setQuestions(questionsResult.value.questions);
       } else {
-        promises.push(Promise.resolve({ questions: [] }));
+        console.error('Failed to load questions:', questionsResult.reason);
+        setQuestions([]);
       }
       
-      // Load recommendations if needed
-      if (contentType === 'all' || contentType === 'recommendations') {
-        promises.push(api.get('/recommendations'));
-        promises.push(api.get('/recommendations/stats/summary'));
+      if (recsResult.status === 'fulfilled') {
+        setRecommendations(recsResult.value.recommendations);
       } else {
-        promises.push(Promise.resolve({ recommendations: [] }));
-        promises.push(Promise.resolve({ total: 0, new: 0 }));
+        console.error('Failed to load recommendations:', recsResult.reason);
+        setRecommendations([]);
       }
       
-      const [questionsData, recsData, recStatsData] = await Promise.all(promises);
+      if (recStatsResult.status === 'fulfilled') {
+        setRecStats(recStatsResult.value);
+      } else {
+        setRecStats({ total: 0, new: 0 });
+      }
       
-      setQuestions(questionsData.questions);
-      setRecommendations(recsData.recommendations);
-      setRecStats(recStatsData);
+      // Only show error if questions failed (primary content)
+      if (questionsResult.status === 'rejected' && contentType !== 'recommendations') {
+        setError('Failed to load questions');
+      } else if (recsResult.status === 'rejected' && contentType === 'recommendations') {
+        setError('Failed to load recommendations');
+      }
     } catch (err) {
       setError(err.message);
     } finally {

@@ -27,12 +27,28 @@ export default function Sent() {
     setLoading(true);
     setError(null);
     try {
-      const [questionsData, recsData] = await Promise.all([
+      // Load questions and recommendations separately so one failure doesn't break both
+      const [questionsResult, recsResult] = await Promise.allSettled([
         api.get('/questions/sent'),
         api.get('/recommendations/sent'),
       ]);
-      setQuestions(questionsData.questions);
-      setRecommendations(recsData.recommendations);
+      
+      if (questionsResult.status === 'fulfilled') {
+        setQuestions(questionsResult.value.questions);
+      } else {
+        console.error('Failed to load questions:', questionsResult.reason);
+      }
+      
+      if (recsResult.status === 'fulfilled') {
+        setRecommendations(recsResult.value.recommendations);
+      } else {
+        console.error('Failed to load recommendations:', recsResult.reason);
+      }
+      
+      // Only show error if both failed
+      if (questionsResult.status === 'rejected' && recsResult.status === 'rejected') {
+        setError('Failed to load content');
+      }
     } catch (err) {
       setError(err.message);
     } finally {
