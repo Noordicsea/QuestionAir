@@ -174,10 +174,12 @@ export default function RecommendationDetail() {
         {recommendation.type === 'youtube' && youtubeId && (
           <div className="aspect-video mb-4 rounded-lg overflow-hidden bg-black">
             <iframe
-              src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+              src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1`}
               title="YouTube video"
               className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
             />
           </div>
@@ -186,10 +188,12 @@ export default function RecommendationDetail() {
         {recommendation.type === 'vimeo' && vimeoId && (
           <div className="aspect-video mb-4 rounded-lg overflow-hidden bg-black">
             <iframe
-              src={`https://player.vimeo.com/video/${vimeoId}?dnt=1`}
+              src={`https://player.vimeo.com/video/${vimeoId}?dnt=1&title=0&byline=0&portrait=0`}
               title="Vimeo video"
               className="w-full h-full"
+              frameBorder="0"
               allow="autoplay; fullscreen; picture-in-picture"
+              referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
             />
           </div>
